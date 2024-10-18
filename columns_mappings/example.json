@@ -1,0 +1,19 @@
+{
+    "original_column_1": {
+        "redshift_column": "redshift_renamed_column_1",
+        "type": "VARCHAR"
+    },
+    "original_column_2": {
+        "type": "TIMESTAMP",
+        "date_format": "%Y-%m-%d %H:%M:%S"
+    },
+    "original_column_3": {
+        "redshift_column": "redshift_renamed_column_3",
+        "type": "DATE",
+        "date_format": "%d/%m/%Y"
+    },
+    "original_column_4": {
+        "type": "INT"
+    }
+}
+  
