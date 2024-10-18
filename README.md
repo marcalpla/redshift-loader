@@ -16,6 +16,15 @@ pip install git+https://github.com/user/redshift-loader.git
 
 ### Functions
 
+#### `dataframe_to_redshift`
+
+This function uploads a Pandas DataFrame to a Redshift table using the `COPY` command. The data is first uploaded temporarily to an S3 bucket and then copied into Redshift. It is important to ensure that your AWS setup has the necessary permissions:
+
+- The function needs permission to write data to the specified S3 bucket.
+- Redshift must be able to access the S3 bucket to perform the `COPY` operation.
+
+After the data is copied to Redshift, the temporary file in S3 is deleted.
+
 ```python
 from redshift_loader.loader import dataframe_to_redshift
 
@@ -33,6 +42,10 @@ dataframe_to_redshift(
     optinal_columns_mapping_dict
 )
 ```
+
+#### `s3_excel_to_redshift`
+
+This function processes multiple Excel files stored in an S3 bucket and loads them into Redshift. The files are combined into a single DataFrame, which is then uploaded temporarily to an S3 bucket and copied into Redshift. The same permissions are required as mentioned above, and the temporary file in S3 is deleted after the `COPY` operation.
 
 ```python
 from redshift_loader.loader import s3_excel_to_redshift
