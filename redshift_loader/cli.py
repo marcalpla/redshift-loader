@@ -3,7 +3,7 @@ import click
 import boto3
 import json
 
-from redshift_loader.loader import s3_excel_to_redshift
+from redshift_loader.loader import s3_objects_to_redshift
 
 
 @click.command()
@@ -17,6 +17,11 @@ from redshift_loader.loader import s3_excel_to_redshift
     type=str, 
     required=True, 
     help='Prefix for the files in S3')
+@click.option(
+    '--s3_object_type',
+    type=str,
+    required=True,
+    help='Type of the S3 object (csv or excel)')
 @click.option(
     '--redshift_host', 
     type=str, 
@@ -60,6 +65,20 @@ from redshift_loader.loader import s3_excel_to_redshift
     help='JSON file in the columns_mappings folder with the columns '
         'mapping')
 @click.option(
+    '--deduplication_columns',
+    type=str,
+    required=False,
+    help='Columns to be used in deduplication, separated by commas. '
+        'If not specified, no deduplication will be performed')
+@click.option(
+    '--on_duplicate_action',
+    type=str,
+    required=False,
+    help='Action to be taken in case of duplicates (ignore, '
+         'overwrite or merge(col1, col2, ...)). Only takes effect if '
+         'deduplication_columns is specified. If not specified, '
+         'ignore will be used')
+@click.option(
     '--s3_copy_bucket',
     type=str,
     required=False,
@@ -67,7 +86,8 @@ from redshift_loader.loader import s3_excel_to_redshift
         'If not specified, s3_bucket will be used')
 def main(
         s3_bucket, 
-        s3_prefix, 
+        s3_prefix,
+        s3_object_type,
         redshift_host,
         redshift_database,
         redshift_username, 
@@ -76,6 +96,8 @@ def main(
         redshift_table,
         redshift_copy_iam_role_arn,
         columns_mapping_file,
+        deduplication_columns,
+        on_duplicate_action,
         s3_copy_bucket
     ):
     columns_mapping = {}
@@ -88,21 +110,28 @@ def main(
         with open(columns_mapping_path, 'r') as file:
             columns_mapping = json.load(file)
 
+    deduplication_columns_list = [
+        col.strip() for col in deduplication_columns.split(',')
+    ] if deduplication_columns else None
+
     s3_client = boto3.client('s3')            
 
-    s3_excel_to_redshift(
+    s3_objects_to_redshift(
         s3_client,
         s3_bucket,
         s3_prefix,
+        s3_object_type,
         redshift_host,
         redshift_database,
         redshift_username,
         redshift_password,
         redshift_schema,
         redshift_table,
-        redshift_copy_iam_role_arn,
-        columns_mapping,
-        s3_copy_bucket)
+        redshift_copy_iam_role_arn=redshift_copy_iam_role_arn,
+        columns_mapping=columns_mapping,
+        deduplication_columns=deduplication_columns_list,
+        on_duplicate_action=on_duplicate_action,
+        s3_copy_bucket=s3_copy_bucket)
 
 
 if __name__ == '__main__':

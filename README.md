@@ -39,36 +39,42 @@ dataframe_to_redshift(
     'redshift_schema',
     'redshift_table',
     'optional_iam_role_arn_for_copy',
-    optinal_columns_mapping_dict
+    optional_columns_mapping_dict,
+    optional_deduplication_columns_list,
+    'optional_on_duplicate_action'
 )
 ```
 
-#### `s3_excel_to_redshift`
+#### `s3_objects_to_redshift`
 
-This function processes multiple Excel files stored in an S3 bucket and loads them into Redshift. The files are combined into a single DataFrame, which is then uploaded temporarily to an S3 bucket and copied into Redshift. The same permissions are required as mentioned above, and the temporary file in S3 is deleted after the `COPY` operation.
+This function processes multiple objects (CSV or Excel files) stored in an S3 bucket and loads them into Redshift. The files are combined into a single DataFrame, which is then uploaded temporarily to an S3 bucket and copied into Redshift. The same permissions are required as mentioned above, and the temporary file in S3 is deleted after the `COPY` operation.
 
 ```python
-from redshift_loader.loader import s3_excel_to_redshift
+from redshift_loader.loader import s3_objects_to_redshift
 
-s3_excel_to_redshift(
+s3_objects_to_redshift(
     s3_client,
     's3_bucket',
     's3_prefix',
+    's3_object_type', # 'csv' or 'excel'
     'redshift_host',
     'redshift_database',
     'redshift_username',
     'redshift_password',
     'redshift_schema',
     'redshift_table',
-    'optional_iam_role_arn_for_copy',        
-    optinal_columns_mapping_dict,
+    'optional_iam_role_arn_for_copy',
+    optional_new_columns_dict,
+    optional_columns_mapping_dict,        
+    optional_deduplication_columns_list,
+    'optional_on_duplicate_action',
     'optional_s3_copy_bucket'
 )
 ```
 
 ### CLI
 
-Also a CLI is available to load data into Redshift, although currently it only supports the functionality given by `s3_excel_to_redshift`. An example of usage is available in the `presets` directory.
+Also a CLI is available to load data into Redshift, although currently it only supports the functionality given by `s3_objects_to_redshift`. An example of usage is available in the `presets` directory.
 
 ### JSON Columns Mapping
 

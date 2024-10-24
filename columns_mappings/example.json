@@ -1,19 +1,37 @@
 {
-    "original_column_1": {
-        "redshift_column": "redshift_renamed_column_1",
-        "type": "VARCHAR"
+    "name_source_column_a": {
+        "target_column": "redshift_column_name",
+        "target_type": "VARCHAR"
     },
-    "original_column_2": {
-        "type": "TIMESTAMP",
-        "date_format": "%Y-%m-%d %H:%M:%S"
+    "name_source_column_b": {
+        "target_type": "TIMESTAMP",
+        "source_timestamp_format": "%Y-%m-%d %H:%M:%S"
     },
-    "original_column_3": {
-        "redshift_column": "redshift_renamed_column_3",
-        "type": "DATE",
-        "date_format": "%d/%m/%Y"
+    "name_source_column_c": {
+        "target_column": "redshift_column_name",
+        "target_type": "DATE",
+        "source_timestamp_format": "%d/%m/%Y"
     },
-    "original_column_4": {
-        "type": "INT"
+    "name_source_column_d": {
+        "target_type": "INT"
+    },
+    "name_source_column_e": {
+        "target_type": "DECIMAL(20,2)"
+    },
+    "name_source_column_f": {
+        "target_type": "SMALLINT"
+    },
+    "name_source_column_g": {
+        "target_type": "BIGINT"
+    },
+    "name_source_column_h": {
+        "target_type": "REAL"
+    },
+    "name_source_column_i": {
+        "target_type": "DOUBLE PRECISSION"
+    },
+    "source_column_name_j": {
+        "target_type": "BOOLEAN"
     }
 }
   
